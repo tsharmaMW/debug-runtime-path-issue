@@ -11,14 +11,22 @@ jobs:
         runs-on: windows-latest
         
         steps:
-            - name: Download mpm
-              run: |
-                Invoke-WebRequest -Uri https://www.mathworks.com/mpm/win64/mpm -OutFile mpm.exe
+            - name: Setup MATLAB
+              uses: matlab-actions/setup-matlab@v2
+              with:
+                release: R2024a
+                products: >
+                    MATLAB_Compiler_SDK
+                    MATLAB_Test
 
-            - name: Install MATLAB products
-              run: |
-                .\mpm.exe install --release=R2024a --destination="${{ github.workspace }}\MATLAB" --products=MATLAB_Compiler_SDK MATLAB_Test
-                
+            # - name: Download mpm
+            #   run: |
+            #     Invoke-WebRequest -Uri https://www.mathworks.com/mpm/win64/mpm -OutFile mpm.exe
+
+            # - name: Install MATLAB products
+            #   run: |
+            #     .\mpm.exe install --release=R2024a --destination="${{ github.workspace }}\MATLAB" --products=MATLAB_Compiler_SDK MATLAB_Test
+
             - name: Print system PATH
               run: echo $env:PATH
               shell: pwsh
