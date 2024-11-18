@@ -1,0 +1,24 @@
+name: Debug Runtime Path Issue
+on:
+    push:
+        branches: [main]
+
+env:
+    MLM_LICENSE_TOKEN: ${{ secrets.MLM_LICENSE_TOKEN }}
+
+jobs:
+    debug-runtime-path-issue:
+        runs-on: windows-latest
+        
+        steps:
+            - name: Download mpm
+              run: |
+                Invoke-WebRequest -Uri https://www.mathworks.com/mpm/win64/mpm -OutFile mpm.exe
+
+            - name: Install MATLAB products
+              run: |
+                .\mpm.exe install --release=R2024a --destination="${{ github.workspace }}\MATLAB" --products=MATLAB_Compiler_SDK MATLAB_Test
+                
+            - name: Print system PATH
+              run: echo $env:PATH
+              shell: pwsh
